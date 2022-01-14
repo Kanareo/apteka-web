@@ -16,8 +16,13 @@ body{
 	margin: 1em;
 	min-width: 700px;
 }
+
 a:link, a:visited, a:hover, a:active{
 	color:white;
 	text-decoration:none;
 	font-family: 'Open Sans', sans-serif;
+}
+
+.ui-growl {
+    top: 14% !important;
 }
