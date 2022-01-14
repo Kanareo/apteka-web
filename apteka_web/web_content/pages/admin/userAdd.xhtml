@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/page-template.xhtml">
+
+	<ui:define name="pageContent">
+		<p:panel header="Dodaj użytkownika">
+			<h:form>
+				<h:panelGrid columns="3" cellpadding="5">
+					<h:outputLabel value="Imie uzytkownika: " />
+					<p:inputText id="firstName" value="#{userEditBB.user.firstName}" required="true"
+						requiredMessage="Podaj imię"
+						validatorMessage="Nieprawidłowe imie">
+						<f:validateRegex pattern="^[A-Z][a-zA-ząćęłńóśźżĄĘŁŃÓŚŹŻ\x20]{2,44}$" />
+					</p:inputText>
+					<p:message for="firstName" />
+
+					<h:outputLabel value="Nazwisko uzytkownika: " />
+					<p:inputText id="secondName" value="#{userEditBB.user.secondName}" required="true"
+						requiredMessage="Podaj nazwisko"
+						validatorMessage="Nieprawidłowe nazwisko">
+						<f:validateRegex pattern="^[A-Z][a-zA-ząćęłńóśźżĄĘŁŃÓŚŹŻ\x20]{2,44}$" />
+					</p:inputText>
+					<p:message for="secondName" />
+
+					<h:outputLabel value="Email: " />
+					<p:inputText id="email" value="#{userEditBB.user.email}" required="true"
+						requiredMessage="Podaj Email"/>
+					<p:message for="email" />
+
+					<h:outputLabel value="Numer telefonu: " />
+					<p:inputText id="phone" value="#{userEditBB.user.phone}" required="true"
+						requiredMessage="Podaj numer telefonu"
+						validatorMessage="Nieprawidłowy numer telefonu, minimalnie 9 cyfr, maksymalnie 12, bez spacji, bez znaków specjalnych">
+						<f:validateRegex pattern="^\d{9,12}$" />
+					</p:inputText>
+					<p:message for="phone" />
+
+					<h:outputLabel value="Haslo uzytkownika: " />
+					<p:inputText id="password" value="#{userEditBB.user.password}" required="true"
+						requiredMessage="Podaj haslo"/>
+					<p:message for="password" />
+
+					<h:outputLabel value="Status aktywacji: " />
+					<p:selectOneMenu id="status" value="#{userEditBB.user.blocked}">
+						<f:selectItem itemLabel="Aktywny" itemValue="0" />
+						<f:selectItem itemLabel="Zablokowany" itemValue="1" />
+					</p:selectOneMenu>
+					<p:message for="status" />
+
+					<h:outputLabel value="Rola użytkownika: " />
+					<p:selectOneMenu id="role" value="#{userEditBB.user.role}">
+						<f:selectItem itemLabel="Użytkownik" itemValue="user" />
+						<f:selectItem itemLabel="Administrator" itemValue="admin" />
+					</p:selectOneMenu>
+					<p:message for="role" />
+					
+				</h:panelGrid>
+				<p:commandButton value="Dodaj użytkownika"
+					action="#{userEditBB.saveData()}" update="@form" />
+			</h:form>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+</html>

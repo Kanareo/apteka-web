@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/page-template.xhtml">
+
+	<ui:define name="pageContent">
+		<p:panel header="Lista użytkowników">
+			<h:form>
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel value="ID uzytkownika: " />
+					<p:inputText id="idUser" value="#{userListBB.user.idUser}" />
+				
+					<h:outputLabel value="Imie uzytkownika: " />
+					<p:inputText id="firstName" value="#{userListBB.user.firstName}" />
+
+					<h:outputLabel value="Nazwisko uzytkownika: " />
+					<p:inputText id="secondName" value="#{userListBB.user.secondName}" />
+
+					<h:outputLabel value="Email: " />
+					<p:inputText id="email" value="#{userListBB.user.email}" />
+
+					<h:outputLabel value="Numer telefonu: " />
+					<p:inputText id="phone" value="#{userListBB.user.phone}" />
+
+					<h:outputLabel value="Status aktywacji: " />
+					<p:selectOneMenu id="status" value="#{userListBB.user.blocked}">
+						<f:selectItem itemLabel="Wszystkie statusy konta" itemValue="2"/>
+						<f:selectItem itemLabel="Aktywni" itemValue="0"/>
+						<f:selectItem itemLabel="Zablokowani" itemValue="1"/>
+					</p:selectOneMenu>
+
+					<h:outputLabel value="Rola użytkownika: " />
+					<p:selectOneMenu id="role" value="#{userListBB.user.role}">
+						<f:selectItem itemLabel="Wszystkie role" itemValue="all" />
+						<f:selectItem itemLabel="Użytkownik" itemValue="user" />
+						<f:selectItem itemLabel="Administrator" itemValue="admin" />
+					</p:selectOneMenu>
+					
+				</h:panelGrid>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:commandButton value="Wyszukaj użytkownika" update="@form data-table" />
+					<p:commandButton value="Wyczyść filter" update="@form data-table" action="#{userListBB.clearFilter()}"/>
+				</h:panelGrid>
+			</h:form>
+			<div class="card">
+				<h:form id="data-table">
+					<p:dataTable var="user" value="#{userListBB.lazyUsers}"
+						paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="10,25,50" selectionMode="single"
+						selection="#{userListBB.selectedUser}" id="userTable">
+						
+						<p:ajax event="rowSelect" update="userDetail"
+							oncomplete="PF('userDialog').show()" />
+
+						<p:column headerText="Id Użytkownika">
+							<h:outputText value="#{user.idUser}" />
+						</p:column>
+						
+						<p:column headerText="Imię">
+							<h:outputText value="#{user.firstName}" />
+						</p:column>
+						
+						<p:column headerText="Nazwisko">
+							<h:outputText value="#{user.secondName}" />
+						</p:column>
+						
+						<p:column headerText="Email">
+							<h:outputText value="#{user.email}" />
+						</p:column>
+						
+						<p:column headerText="Numer telefonu">
+							<h:outputText value="#{user.phone}" />
+						</p:column>
+						
+						<p:column headerText="Status blokady">
+							<h:outputText value="#{user.blocked == 0 ? 'Aktywny' : 'Zablokowany'}"/>
+						</p:column>
+						
+						<p:column headerText="Rola">
+							<h:outputText value="#{user.role}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+				<p:dialog header="Edytuj status blokady" widgetVar="userDialog"
+					modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+					<p:outputPanel id="userDetail" style="text-align:center;">
+						<h:form>
+							<p:panelGrid columns="3">
+								<h:outputText value="Status:" />
+								<p:selectOneMenu id="status" value="#{userListBB.selectedUser.blocked}">
+									<f:selectItem itemLabel="Aktywny" itemValue="0"/>
+									<f:selectItem itemLabel="Zablokowany" itemValue="1"/>
+								</p:selectOneMenu>
+								<p:commandButton value="Zaktualizuj" update="data-table:userTable" action="#{userListBB.editStatus()}"></p:commandButton>	
+							</p:panelGrid>
+						</h:form>	
+					</p:outputPanel>
+				</p:dialog>
+			</div>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+</html>

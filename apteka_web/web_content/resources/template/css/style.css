@@ -1,0 +1,23 @@
+body{
+	font-family: 'Century Gothic',helvetica,verdana,arial;
+	background-color: gray; 
+	margin:0;
+}
+
+.bottom-space{
+	margin-bottom: 1em;
+}
+
+.top-space{
+	margin-top: 1em;
+}
+
+#page_wrapper{
+	margin: 1em;
+	min-width: 700px;
+}
+a:link, a:visited, a:hover, a:active{
+	color:white;
+	text-decoration:none;
+	font-family: 'Open Sans', sans-serif;
+}

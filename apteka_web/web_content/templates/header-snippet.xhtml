@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+	<p:panel toggleable="true" styleClass="bottom-space">
+		<div>
+			<h:form style="display: flex; justify-content: space-between; align-items: center;">
+				<h1>
+					<ui:insert name="title"></ui:insert>
+				</h1>
+				<div style="font-size:32px; display: flex; justify-content: space-between; align-items: center;">
+					<h:link value="Wyszukiwarka produktów" outcome="/pages/apteka/browser" rendered="#{remoteClient.isInRole('admin') or remoteClient.isInRole('user')}" style="padding: 0 0.8em 0 0.8em;"></h:link>
+					<h:link value="Zamówienia" outcome="/pages/apteka/orderView" rendered="#{remoteClient.isInRole('user')}" style="padding: 0 0.8em 0 0.8em;"></h:link>
+					<h:link value="Dodaj użytkownika" outcome="/pages/admin/userAdd" rendered="#{remoteClient.isInRole('admin')}" style="padding: 0 0.8em 0 0.8em;"></h:link>
+					<h:link value="Lista użytkowników" outcome="/pages/admin/userList" rendered="#{remoteClient.isInRole('admin')}" style="padding: 0 0.8em 0 0.8em;"></h:link>
+				<p:commandButton value="Wyloguj" action="#{loginBB.doLogout()}"
+					rendered="#{remoteClient.isInRole('admin') or remoteClient.isInRole('user')}" />
+				</div>
+			</h:form>
+		</div>
+	</p:panel>
+
+</ui:composition>

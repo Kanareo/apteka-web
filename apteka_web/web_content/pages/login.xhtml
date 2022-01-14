@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/page-template.xhtml">
+	<ui:define name="pageContent">
+		<p:panel>
+			<h:form>
+				<p:panelGrid columns="2" styleClass="ui-noborder">
+					<h:outputLabel for="login" value="Email:" />
+					<p:inputText id="login" value="#{loginBB.email}" required="true"
+						requiredMessage="Podaj Email" 
+						style="width:100%"/>
+					<h:outputLabel for="pass" value="Hasło:" />
+					<p:password id="pass" value="#{loginBB.password}" required="true"
+						requiredMessage="Podaj hasło" toggleMask="true" redisplay="true" />
+				</p:panelGrid>
+
+				<p:commandButton value="Zaloguj" action="#{loginBB.doLogin()}"
+					update="@form" />
+
+				<p:messages id="msg" />
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>
