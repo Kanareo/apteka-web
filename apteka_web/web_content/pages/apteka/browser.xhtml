@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/page-template.xhtml">
+
+	<ui:define name="pageContent">
+		<p:panel header="Lista produktów">
+			<h:form id="filter">
+				<h:panelGrid columns="4" cellpadding="5">
+					<h:outputLabel value="Nazwa Produktu: " />
+					<p:inputText value="#{productListBB.productName}" />
+					
+					
+					<p:selectOneMenu id="brand" value="#{productListBB.brandName}">
+						<f:selectItem itemLabel="Wszyscy producenci" itemValue="0"/>
+						<f:selectItems value="#{brandListBB.brands}" var="b" itemLabel="#{b.brandName}" itemValue="#{b.idBrand}"/>
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="category" value="#{productListBB.categoryName}">
+						<f:selectItem itemLabel="Wszystkie kategorie" itemValue="0"/>
+						<f:selectItems value="#{categoryListBB.category}" var="c" itemLabel="#{c.categoryName}" itemValue="#{c.idCategory}"/>
+					</p:selectOneMenu>
+
+					<p:commandButton value="Szukaj" update="data-table" />
+					<p:commandButton value="Wyczyść filter"
+						action="#{productListBB.clearFilter()}" update="@form data-table" />
+				</h:panelGrid>
+			</h:form>
+			<div class="card">
+				<h:form id="data-table">
+					<p:dataTable var="product" value="#{productListBB.lazyProducts}"
+						paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="10,25,50" selectionMode="single"
+						selection="#{productListBB.selectedProduct}" id="productTable">
+
+						<p:ajax event="rowSelect" update="productDetail"
+							oncomplete="PF('productDialog').show()" />
+
+						<p:column headerText="Nazwa produktu">
+							<h:outputText value="#{product.productName}" />
+						</p:column>
+
+						<p:column headerText="Kategoria">
+							<h:outputText value="#{product.category.categoryName}" />
+						</p:column>
+						
+						<p:column headerText="Producent">
+							<h:outputText value="#{product.brand.brandName}" />
+						</p:column>
+						
+						<p:column headerText="Cena">
+							<h:outputText value="#{product.productPrice}" />
+						</p:column>
+						
+						<p:column headerText="Ilość">
+							<h:outputText value="#{product.quantity}" />
+						</p:column>
+
+					</p:dataTable>
+					<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" />
+				</h:form>
+				<p:dialog header="Zarządzaj" widgetVar="productDialog"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="productDetail" style="text-align:center;">
+							<h:form>
+								<p:panelGrid columns="3">
+									<h:outputText value="Edytuj ilość:" rendered="#{remoteClient.isInRole('admin')}" />
+									<p:inputNumber value="#{productListBB.selectedProduct.quantity}" modifyValueOnWheel="false" minValue="0" decimalPlaces="0" rendered="#{remoteClient.isInRole('admin')}"/>
+									<p:commandButton value="Zaktualizuj" update="data-table:productTable"  action="#{productListBB.editQuantity()}" rendered="#{remoteClient.isInRole('admin')}" oncomplete="PF('productDialog').hide()"></p:commandButton>
+									<h:outputText value="Dodaj do zamówienia:" rendered="#{remoteClient.isInRole('user')}"/>
+									<p:inputNumber value="#{orderBB.itemQuantity}" modifyValueOnWheel="false" minValue="1" decimalPlaces="0" rendered="#{remoteClient.isInRole('user')}"/>
+									<p:commandButton value="Dodaj" update="data-table:productTable data-table:growl"  action="#{orderBB.addItem(productListBB.selectedProduct)}" rendered="#{remoteClient.isInRole('user')}" oncomplete="PF('productDialog').hide()"></p:commandButton>	
+								</p:panelGrid>
+							</h:form>
+						</p:outputPanel>
+				</p:dialog>
+			</div>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+</html>

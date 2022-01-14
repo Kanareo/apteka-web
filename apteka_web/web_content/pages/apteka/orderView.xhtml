@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/page-template.xhtml">
+
+	<ui:define name="pageContent">
+		<p:panel header="Aktualne zamówienie">
+			<div class="card">
+				<h:form id="data-table">
+					<h:outputText value="#{orderBB.setEmail(remoteClient.details.email)}" id="email"/>
+					<h:outputText rendered="#{orderBB.orderItems == null}"
+						value="Koszyk jest pusty" />
+					<p:dataTable var="order" value="#{orderBB.orderItems}"
+						paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="10,25,50" id="orderTable"
+						rendered="#{orderBB.orderItems != null}">
+
+						<p:column headerText="Nazwa produktu">
+							<h:outputText value="#{order.product.productName}" />
+						</p:column>
+
+						<p:column headerText="Ilość">
+							<h:outputText value="#{order.quantity}" />
+						</p:column>
+
+						<p:column headerText="Łączna cena">
+							<h:outputText value="#{order.combinedPrice}" />
+						</p:column>
+
+						<p:column>
+							<p:commandButton value="Usuń" update="@form"
+								action="#{orderBB.deleteItem(order)}" />
+						</p:column>
+
+					</p:dataTable>
+					<div
+						style="font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
+						<h:outputText value="Cena zamówienia: #{orderBB.orderPrice}"
+							rendered="#{orderBB.orderItems != null}" />
+						<p:commandButton value="Zamów" update="data-table data-table2"
+							action="#{orderBB.addOrder()}"
+							rendered="#{(orderBB.orderItems != null)}" />
+					</div>
+				</h:form>
+			</div>
+		</p:panel>
+		<br />
+		<p:panel header="Zamówienia do potwierdzenia">
+			<h:form id="data-table2">
+				<div class="card">
+					<h:outputText value="Brak zamówień oczekujących na potwierdzenie" rendered="#{!orderBB.showDelivery()}"/>
+					<p:dataTable var="order" value="#{orderBB.orderList}"
+						paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="10,25,50" id="orderTable" rendered="#{orderBB.showDelivery()}">
+
+						<p:column headerText="ID Zamówienia">
+							<h:outputText value="#{order.idOrder}" />
+						</p:column>
+
+						<p:column headerText="Użytkownik">
+							<h:outputText
+								value="#{order.user.firstName} #{order.user.secondName}" />
+						</p:column>
+
+						<p:column headerText="Status zamówienia">
+							<h:outputText value="#{order.orderStatus}" />
+						</p:column>
+
+						<p:column headerText="Data złożenia zamówienia">
+							<h:outputText value="#{order.orderDate}" />
+						</p:column>
+
+						<p:column>
+							<p:commandButton value="Potwierdź dostawę" update="@form"
+								action="#{orderBB.confirmDelivery()}"
+								rendered="#{orderBB.orderList != null}" />
+						</p:column>
+
+					</p:dataTable>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
+</html>
