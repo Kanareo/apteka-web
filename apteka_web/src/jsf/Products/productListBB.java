@@ -36,7 +36,8 @@ public class productListBB implements Serializable {
 	private int brandName;
 	private int categoryName;
 	
-
+	@Inject
+	FacesContext ctx;
 	@Inject
 	Flash flash;
 
@@ -144,8 +145,9 @@ public class productListBB implements Serializable {
 	
 	public String editQuantity() {
 		if(selectedProduct != null) {
-			productDAO.merge(selectedProduct);			
-		}
+			productDAO.merge(selectedProduct);
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zmieniono ilość produktu dla produktu o nazwie " + selectedProduct.getProductName(), null));
+		}else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Zmiana ilości nie udała się, spróbuj ponownie", null));
 		return PAGE_STAY_AT_THE_SAME;
 	}
 	
