@@ -42,9 +42,11 @@ public class userEditBB implements Serializable {
 	public String saveData() {
 		try {
 			if (user.getIdUser() == null) {
-				userDAO.create(user);
+				if(userDAO.getUser(user.getEmail()) == null) {
+					userDAO.create(user);
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano " + user.getFirstName() + " " + user.getSecondName(), null));
+				}else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Podany email:  " + user.getEmail() + " znajduje się już w bazie", null));
 			}
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano " + user.getFirstName() + " " + user.getSecondName(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wystąpił błąd podczas zapisu", null));
