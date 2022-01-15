@@ -62,8 +62,9 @@
 					
 				</h:panelGrid>
 				<p:commandButton value="Dodaj użytkownika"
-					action="#{userEditBB.saveData()}" update="@form" />
+					action="#{userEditBB.saveData()}" update="@form growl" />
 			</h:form>
+			<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" />
 		</p:panel>
 	</ui:define>
 

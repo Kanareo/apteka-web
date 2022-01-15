@@ -43,16 +43,15 @@ public class userEditBB implements Serializable {
 		try {
 			if (user.getIdUser() == null) {
 				userDAO.create(user);
-			} else {
-				userDAO.merge(user);
 			}
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano " + user.getFirstName() + " " + user.getSecondName(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wystąpił błąd podczas zapisu", null));
 			return PAGE_STAY_AT_THE_SAME;
 		}
 
-		return PAGE_MAIN;
+		return PAGE_STAY_AT_THE_SAME;
 	}
 
 }
