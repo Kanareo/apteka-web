@@ -114,10 +114,18 @@ public class orderBB implements Serializable{
 	}
 	
 	public void deleteItem(OrderItem forwardedItem) {
-		orderItems.remove(forwardedItem);
-		orderPrice -= forwardedItem.getCombinedPrice();
-		if(orderItems.isEmpty()) {
-			orderItems = null;
+		try {
+			if(forwardedItem != null) {
+				orderItems.remove(forwardedItem);
+				orderPrice -= forwardedItem.getCombinedPrice();
+				if(orderItems.isEmpty()) {
+					orderItems = null;
+				}
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie usunięto produkt " + forwardedItem.getProduct().getProductName() + " z dostawy", null));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wystąpił błąd podczas usuwania", null));
 		}
 	}
 	
@@ -146,6 +154,7 @@ public class orderBB implements Serializable{
 				}
 				orderPrice = 0;
 				orderItems = null;
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zapisano dostawę w bazie", null));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -177,7 +186,7 @@ public class orderBB implements Serializable{
 				i++;
 			}
 			orderDAO.merge(order);
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pomyślnie zatwierdzono dostawę", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zatwierdzono dostawę", null));
 		}
 		return PAGE_STAY_AT_THE_SAME;
 	}

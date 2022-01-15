@@ -37,16 +37,17 @@
 							<p:commandButton value="Usuń" update="@form"
 								action="#{orderBB.deleteItem(order)}" />
 						</p:column>
-
+						
 					</p:dataTable>
 					<div
 						style="font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
 						<h:outputText value="Cena zamówienia: #{orderBB.orderPrice}"
 							rendered="#{orderBB.orderItems != null}" />
-						<p:commandButton value="Zamów" update="data-table data-table2"
+						<p:commandButton value="Zamów" update="data-table data-table2 growl"
 							action="#{orderBB.addOrder()}"
 							rendered="#{(orderBB.orderItems != null)}" />
 					</div>
+					<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" />
 				</h:form>
 			</div>
 		</p:panel>
@@ -78,11 +79,10 @@
 						</p:column>
 
 						<p:column>
-							<p:commandButton value="Potwierdź dostawę" update="@form"
+							<p:commandButton value="Potwierdź dostawę" update="@form data-table:growl"
 								action="#{orderBB.confirmDelivery(order)}"
 								rendered="#{orderBB.orderList != null}" />
 						</p:column>
-
 					</p:dataTable>
 				</div>
 			</h:form>
