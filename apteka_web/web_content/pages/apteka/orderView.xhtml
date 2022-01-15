@@ -79,7 +79,7 @@
 
 						<p:column>
 							<p:commandButton value="Potwierdź dostawę" update="@form"
-								action="#{orderBB.confirmDelivery()}"
+								action="#{orderBB.confirmDelivery(order)}"
 								rendered="#{orderBB.orderList != null}" />
 						</p:column>
 

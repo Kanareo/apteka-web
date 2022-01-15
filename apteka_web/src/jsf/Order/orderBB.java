@@ -1,9 +1,7 @@
 package jsf.Order;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +19,11 @@ import org.primefaces.model.SortMeta;
 
 import jsf.dao.OrderDAO;
 import jsf.dao.OrderItemDAO;
+import jsf.dao.ProductDAO;
 import jsf.dao.UserDAO;
 import jsf.entities.Order;
 import jsf.entities.OrderItem;
 import jsf.entities.Product;
-import jsf.entities.User;
 
 @Named
 @SessionScoped
@@ -34,12 +32,11 @@ public class orderBB implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private static final String PAGE_STAY_AT_THE_SAME = null;
-	private static final String PAGE_PRODUCT_LIST = "pages/apteka/browser";
-	private static final String PAGE_ORDER_EDIT = "pages/apteka/orderView";
 	
 	private Order order;
 	private OrderItem orderItem;
 	private LazyDataModel<Order> orderList;
+	private Product product;
 	
 	private String email;
 	
@@ -56,6 +53,9 @@ public class orderBB implements Serializable{
 	
 	@EJB
 	OrderItemDAO orderItemDAO;
+	
+	@EJB
+	ProductDAO productDAO;
 	
 	@EJB
 	UserDAO userDAO;
@@ -157,6 +157,29 @@ public class orderBB implements Serializable{
 	
 	public boolean showDelivery() {
 		return orderDAO.showDelivery();
+	}
+	
+	public String confirmDelivery(Order order) {
+		if(order != null) {
+			int i = 0;
+			int quantity = 0;
+			order.setOrderStatus("Dostarczone");
+			order.setDeliveryDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+			order.setOrderItems(orderItemDAO.getOrderItemsByID(order.getIdOrder()));
+			System.out.println(order);
+			while(i <= order.getOrderItems().size()-1) {
+				product = new Product();
+				product = order.getOrderItems().get(i).getProduct();
+				quantity = order.getOrderItems().get(i).getQuantity();
+				quantity += product.getQuantity();
+				product.setQuantity(quantity);
+				productDAO.merge(product);
+				i++;
+			}
+			orderDAO.merge(order);
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Pomyślnie zatwierdzono dostawę", null));
+		}
+		return PAGE_STAY_AT_THE_SAME;
 	}
 
 	public int getItemQuantity() {
