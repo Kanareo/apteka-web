@@ -40,6 +40,8 @@ public class orderBB implements Serializable{
 	
 	private String email;
 	
+	private Order selectedOrder;
+	
 	private int itemQuantity = 0;
 	private float orderPrice = 0;
 	
@@ -190,6 +192,10 @@ public class orderBB implements Serializable{
 		}
 		return PAGE_STAY_AT_THE_SAME;
 	}
+	
+	public List<OrderItem> getOrderItems(Order order){
+		return orderItemDAO.getOrderItems(order);
+	}
 
 	public int getItemQuantity() {
 		return itemQuantity;
@@ -229,6 +235,14 @@ public class orderBB implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Order getSelectedOrder() {
+		return selectedOrder;
+	}
+
+	public void setSelectedOrder(Order selectedOrder) {
+		this.selectedOrder = selectedOrder;
 	}
 	
 }

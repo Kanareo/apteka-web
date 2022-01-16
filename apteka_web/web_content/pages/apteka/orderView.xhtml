@@ -12,13 +12,14 @@
 		<p:panel header="Aktualne zamówienie">
 			<div class="card">
 				<h:form id="data-table">
-					<h:outputText value="#{orderBB.setEmail(remoteClient.details.email)}" id="email"/>
+					<h:outputText
+						value="#{orderBB.setEmail(remoteClient.details.email)}" id="email" />
 					<h:outputText rendered="#{orderBB.orderItems == null}"
 						value="Koszyk jest pusty" />
 					<p:dataTable var="order" value="#{orderBB.orderItems}"
 						paginator="true" rows="10"
 						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="10,25,50" id="orderTable"
+						rowsPerPageTemplate="10,25,50" id="orderTable" rowKey="#{order.idOrder}"
 						rendered="#{orderBB.orderItems != null}">
 
 						<p:column headerText="Nazwa produktu">
@@ -37,17 +38,19 @@
 							<p:commandButton value="Usuń" update="@form"
 								action="#{orderBB.deleteItem(order)}" />
 						</p:column>
-						
+
 					</p:dataTable>
 					<div
 						style="font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
 						<h:outputText value="Cena zamówienia: #{orderBB.orderPrice}"
 							rendered="#{orderBB.orderItems != null}" />
-						<p:commandButton value="Zamów" update="data-table data-table2 growl"
+						<p:commandButton value="Zamów"
+							update="data-table data-table2 growl"
 							action="#{orderBB.addOrder()}"
 							rendered="#{(orderBB.orderItems != null)}" />
 					</div>
-					<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" />
+					<p:growl id="growl" showDetail="true"
+						skipDetailIfEqualsSummary="true" />
 				</h:form>
 			</div>
 		</p:panel>
@@ -55,11 +58,13 @@
 		<p:panel header="Zamówienia do potwierdzenia">
 			<h:form id="data-table2">
 				<div class="card">
-					<h:outputText value="Brak zamówień oczekujących na potwierdzenie" rendered="#{!orderBB.showDelivery()}"/>
+					<h:outputText value="Brak zamówień oczekujących na potwierdzenie"
+						rendered="#{!orderBB.showDelivery()}" />
 					<p:dataTable var="order" value="#{orderBB.orderList}"
 						paginator="true" rows="10"
 						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="10,25,50" id="orderTable" rendered="#{orderBB.showDelivery()}">
+						rowsPerPageTemplate="10,25,50" id="orderTable"
+						rendered="#{orderBB.showDelivery()}">
 
 						<p:column headerText="ID Zamówienia">
 							<h:outputText value="#{order.idOrder}" />
@@ -79,13 +84,49 @@
 						</p:column>
 
 						<p:column>
-							<p:commandButton value="Potwierdź dostawę" update="@form data-table:growl"
+							<p:commandButton value="Szczegóły" icon="pi pi-search"
+								update="orderDetail" onclick="PF('orderDialog').show()"
+								process="@this">
+								<f:setPropertyActionListener value="#{order}"
+									target="#{orderBB.selectedOrder}" />
+								<p:resetInput target="orderDetail" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column>
+							<p:commandButton value="Potwierdź dostawę"
+								update="@form data-table:growl"
 								action="#{orderBB.confirmDelivery(order)}"
 								rendered="#{orderBB.orderList != null}" />
 						</p:column>
 					</p:dataTable>
 				</div>
 			</h:form>
+			<p:dialog header="Szczegóły" widgetVar="orderDialog" modal="true"
+				showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+				<p:outputPanel id="orderDetail">
+					<p:outputPanel rendered="#{not empty orderBB.selectedOrder}">
+					<p:dataTable var="orderItems"
+						value="#{orderBB.getOrderItems(orderBB.selectedOrder)}"
+						paginator="true" rows="10"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="10,25,50">
+
+						<p:column headerText="Nazwa produktu">
+							<h:outputText value="#{orderItems.product.productName}" />
+						</p:column>
+
+						<p:column headerText="Ilość">
+							<h:outputText value="#{orderItems.quantity}" />
+						</p:column>
+
+						<p:column headerText="Łączna cena">
+							<h:outputText value="#{orderItems.combinedPrice}" />
+						</p:column>
+					</p:dataTable>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:dialog>
 		</p:panel>
 	</ui:define>
 
