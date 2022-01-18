@@ -103,14 +103,34 @@ public class orderBB implements Serializable{
 			if(orderItems == null) {
 				orderItems = new ArrayList<OrderItem>();
 			}
-			orderItem = new OrderItem();
-			orderItem.setProduct(product);
-			orderItem.setQuantity(itemQuantity);
-			orderItem.setCombinedPrice((float)Math.round(((product.getProductPrice()*itemQuantity))*100f)/100f);
-			orderItem.setDiscount(0);
-			orderItems.add(orderItem);
-			orderPrice += (float)Math.round(((orderItem.getCombinedPrice()))*100f)/100f;
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano " + orderItem.getProduct().getProductName() , null));
+			int i = 0;
+			int quantity = 0;
+			boolean exist = false;
+			while(i <= orderItems.size()-1) {
+				if(product.getIdProduct() == orderItems.get(i).getProduct().getIdProduct()) {
+					orderItem = new OrderItem();
+					quantity = orderItems.get(i).getQuantity();
+					quantity += itemQuantity;
+					orderItem.setProduct(product);
+					orderItem.setQuantity(quantity);
+					orderItem.setCombinedPrice((float)Math.round(((product.getProductPrice()*quantity))*100f)/100f);
+					orderItem.setDiscount(0);
+					orderItems.set(i, orderItem);
+					orderPrice += (float)Math.round((product.getProductPrice()*itemQuantity)*100f)/100f;
+					exist = true;
+				}
+				i++;
+			}
+			if(!exist) {
+				orderItem = new OrderItem();
+				orderItem.setProduct(product);
+				orderItem.setQuantity(itemQuantity);
+				orderItem.setCombinedPrice((float)Math.round(((product.getProductPrice()*itemQuantity))*100f)/100f);
+				orderItem.setDiscount(0);
+				orderItems.add(orderItem);
+				orderPrice += (float)Math.round(((orderItem.getCombinedPrice()))*100f)/100f;
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano " + orderItem.getProduct().getProductName() , null));
+			} else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Produkt " + orderItem.getProduct().getProductName() + " znajduje się już w koszyku. Zaktualizowano jego ilość", null));
 		}
 		return PAGE_STAY_AT_THE_SAME;
 	}
