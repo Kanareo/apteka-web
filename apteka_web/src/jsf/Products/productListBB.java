@@ -135,7 +135,7 @@ public class productListBB implements Serializable {
 	}
 
 	public void onRowSelect(SelectEvent<Product> event) {
-		FacesMessage msg = new FacesMessage("Wybrana product ", String.valueOf(event.getObject().getIdProduct()));
+		FacesMessage msg = new FacesMessage("Wybrany produkt ", String.valueOf(event.getObject().getIdProduct()));
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
