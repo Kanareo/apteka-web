@@ -19,21 +19,26 @@
 					<p:dataTable var="order" value="#{orderBB.orderItems}"
 						paginator="true" rows="10"
 						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="10,25,50" id="orderTable" rowKey="#{order.idOrder}"
-						rendered="#{orderBB.orderItems != null}">
+						rowsPerPageTemplate="10,25,50" id="orderTable" rowKey="#{order.order.idOrder}"
+						rendered="#{orderBB.orderItems != null}">		
 
 						<p:column headerText="Nazwa produktu">
 							<h:outputText value="#{order.product.productName}" />
 						</p:column>
 
 						<p:column headerText="Ilość">
-							<h:outputText value="#{order.quantity}" />
+							<p:inputNumber value="#{order.quantity}" />
 						</p:column>
 
 						<p:column headerText="Łączna cena">
 							<h:outputText value="#{order.combinedPrice}" />
 						</p:column>
-
+						
+						<p:column>
+							<p:commandButton value="Zaktualizuj ilość" update="@form data-table:growl"
+								action="#{orderBB.changeItemQuantity(order)}" />
+						</p:column>
+						
 						<p:column>
 							<p:commandButton value="Usuń" update="@form"
 								action="#{orderBB.deleteItem(order)}" />
@@ -99,7 +104,7 @@
 								action="#{orderBB.confirmDelivery(order)}"
 								rendered="#{orderBB.orderList != null}" />
 						</p:column>
-					</p:dataTable>
+					</p:dataTable>	
 				</div>
 			</h:form>
 			<p:dialog header="Szczegóły" widgetVar="orderDialog" modal="true"

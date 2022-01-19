@@ -213,6 +213,27 @@ public class orderBB implements Serializable{
 		return PAGE_STAY_AT_THE_SAME;
 	}
 	
+	public String changeItemQuantity(OrderItem orderItem) {
+		if(orderItem != null) {
+			int i = 0;
+			int quantity = 0;;
+			while(i <= orderItems.size()-1) {
+				if(orderItem.getProduct().getIdProduct() == orderItems.get(i).getProduct().getIdProduct()) {
+					orderPrice -= orderItem.getCombinedPrice();
+					quantity = orderItems.get(i).getQuantity();
+					orderItem.setProduct(orderItem.getProduct());
+					orderItem.setQuantity(quantity);
+					orderItem.setCombinedPrice((float)Math.round(((orderItem.getProduct().getProductPrice()*quantity))*100f)/100f);
+					orderItem.setDiscount(0);
+					orderItems.set(i, orderItem);
+					orderPrice += (float)Math.round((orderItem.getProduct().getProductPrice()*orderItem.getQuantity())*100f)/100f;
+				}
+				i++;
+			}
+		}
+		return PAGE_STAY_AT_THE_SAME;
+	}
+	
 	public List<OrderItem> getOrderItems(Order order){
 		return orderItemDAO.getOrderItems(order);
 	}
