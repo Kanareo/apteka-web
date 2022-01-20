@@ -227,10 +227,11 @@ public class orderBB implements Serializable{
 					orderItem.setDiscount(0);
 					orderItems.set(i, orderItem);
 					orderPrice += (float)Math.round((orderItem.getProduct().getProductPrice()*orderItem.getQuantity())*100f)/100f;
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zmieniono ilość produktu " + orderItem.getProduct().getProductName(), null));
 				}
 				i++;
 			}
-		}
+		}else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nie udało się zaktualizować ilości, spróbuj ponownie później", null));
 		return PAGE_STAY_AT_THE_SAME;
 	}
 	
