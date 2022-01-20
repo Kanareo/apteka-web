@@ -27,7 +27,7 @@
 						</p:column>
 
 						<p:column headerText="Ilość">
-							<p:inputNumber value="#{order.quantity}" />
+							<p:inputNumber value="#{order.quantity}" modifyValueOnWheel="false" minValue="1" decimalPlaces="0"/>
 						</p:column>
 
 						<p:column headerText="Łączna cena">
