@@ -98,7 +98,6 @@ public class orderBB implements Serializable{
 	}
 	
 	public String addItem(Product product) {
-		//orderDAO.getLastID();
 		if(product != null) {
 			if(orderItems == null) {
 				orderItems = new ArrayList<OrderItem>();
@@ -162,11 +161,6 @@ public class orderBB implements Serializable{
 				order.setDeliveryDate(null);
 				order.setOrderStatus("Zamówione");
 				order.setUser(userDAO.find(userDAO.getUser(email).getIdUser()));
-//				System.out.println(order.getOrderStatus());
-//				System.out.println(order.getDeliveryDate());
-//				System.out.println(order.getOrderDate());
-//				System.out.println(order.getIdOrder());
-//				System.out.println(order.getUser().getIdUser());
 				orderDAO.create(order);
 				while(i <= orderItems.size()-1) {
 					orderItem = orderItems.get(i);

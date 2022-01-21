@@ -19,7 +19,6 @@ public class userEditBB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static final String PAGE_STAY_AT_THE_SAME = null;
-	private static final String PAGE_MAIN = "/pages/apteka/main?faces-redirect=true"; // zmiana url
 
 	private User user = new User();
 	

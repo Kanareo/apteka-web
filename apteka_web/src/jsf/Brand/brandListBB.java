@@ -25,8 +25,6 @@ import jsf.entities.Brand;
 @ViewScoped
 public class brandListBB implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private static final String PAGE_STAY_AT_THE_SAME = null;	
 	
 	private LazyDataModel<Brand> lazyBrands;
 	private Brand selectedBrand;

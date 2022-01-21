@@ -1,9 +1,5 @@
 package jsf.Login;
 
-import java.nio.channels.NetworkChannel;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -24,7 +20,7 @@ public class LoginBB {
 	
 	private static final String PAGE_STAY_AT_THE_SAME = null;
 	private static final String PAGE_LOGIN = "/pages/login";
-	private static final String PAGE_MAIN = "/pages/apteka/main?faces-redirect=true";
+	private static final String PAGE_MAIN = "/pages/apteka/main?faces-redirect=true"; //zmiana URL
 	
 	private String email;
 	private String password;
