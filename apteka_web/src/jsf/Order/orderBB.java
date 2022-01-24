@@ -185,24 +185,30 @@ public class orderBB implements Serializable{
 	}
 	
 	public String confirmDelivery(Order order) {
-		if(order != null) {
-			int i = 0;
-			int quantity = 0;
-			order.setOrderStatus("Dostarczone");
-			order.setDeliveryDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
-			order.setOrderItems(orderItemDAO.getOrderItemsByID(order.getIdOrder()));
-			System.out.println(order);
-			while(i <= order.getOrderItems().size()-1) {
-				product = new Product();
-				product = order.getOrderItems().get(i).getProduct();
-				quantity = order.getOrderItems().get(i).getQuantity();
-				quantity += product.getQuantity();
-				product.setQuantity(quantity);
-				productDAO.merge(product);
-				i++;
+		try {
+			if(order != null) {
+				int i = 0;
+				int quantity = 0;
+				order.setOrderStatus("Dostarczone");
+				order.setDeliveryDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+				order.setOrderItems(orderItemDAO.getOrderItemsByID(order.getIdOrder()));
+				System.out.println(order);
+				while(i <= order.getOrderItems().size()-1) {
+					product = new Product();
+					product = order.getOrderItems().get(i).getProduct();
+					quantity = order.getOrderItems().get(i).getQuantity();
+					quantity += product.getQuantity();
+					product.setQuantity(quantity);
+					productDAO.merge(product);
+					i++;
+				}
+				orderDAO.merge(order);
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zatwierdzono dostawę", null));
 			}
-			orderDAO.merge(order);
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zatwierdzono dostawę", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wystąpił błąd podczas zapisu", null));
+			return PAGE_STAY_AT_THE_SAME;
 		}
 		return PAGE_STAY_AT_THE_SAME;
 	}
