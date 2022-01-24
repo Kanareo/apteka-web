@@ -92,6 +92,7 @@ public class productListBB implements Serializable {
 	public void clearFilter() {
 		productName = null;
 		brandName = 0;
+		categoryName = 0;
 	}
 	
 	public String getProductName() {

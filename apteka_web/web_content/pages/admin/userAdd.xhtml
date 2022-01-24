@@ -64,7 +64,7 @@
 				<p:commandButton value="Dodaj użytkownika"
 					action="#{userEditBB.saveData()}" update="@form growl" />
 			</h:form>
-			<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" />
+			<p:growl id="growl" showDetail="true" skipDetailIfEqualsSummary="true" globalOnly="true"/>
 		</p:panel>
 	</ui:define>
 
