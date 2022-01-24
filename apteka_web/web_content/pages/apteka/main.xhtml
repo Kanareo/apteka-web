@@ -9,9 +9,10 @@
 <ui:composition template="/templates/page-template.xhtml">
 
 	<ui:define name="pageContent">
-		<p:panel header="Apteka online">
+		<p:panel header="Strona główna">
 			<div class="card">
-				
+				<h2 style="text-align:left;font-size:1.5em">Zalogowano jako: #{remoteClient.details.firstName} #{remoteClient.details.secondName}</h2>
+				<h3 style="text-align:left;font-size:1em">Rola: #{remoteClient.details.role == "user" ? "Użytkownik" : remoteClient.details.role == "admin" ? "Administrator": "Error"}</h3>
 			</div>
 		</p:panel>	
 	</ui:define>
