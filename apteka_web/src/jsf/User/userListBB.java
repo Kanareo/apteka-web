@@ -100,11 +100,13 @@ public class userListBB implements Serializable{
 	}
 	
 	public String editStatus() {
-		if(selectedUser != null) {
-			System.out.println(selectedUser.getBlocked());
-			userDAO.merge(selectedUser);
-			System.out.println(selectedUser.getFirstName());
-			
+		try {
+			if(selectedUser != null) {
+				userDAO.merge(selectedUser);			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return PAGE_STAY_AT_THE_SAME;
 		}
 		return PAGE_STAY_AT_THE_SAME;
 	}
