@@ -71,7 +71,7 @@
 							<h:form>
 								<p:panelGrid columns="3">
 									<h:outputText value="Edytuj ilość:" rendered="#{remoteClient.isInRole('admin')}" />
-									<p:inputNumber value="#{productListBB.selectedProduct.quantity}" modifyValueOnWheel="false" minValue="0" decimalPlaces="0" rendered="#{remoteClient.isInRole('admin')}"/>
+									<p:inputNumber value="#{productListBB.selectedProduct.quantity}" modifyValueOnWheel="false" minValue="1" decimalPlaces="0" rendered="#{remoteClient.isInRole('admin')}"/>
 									<p:commandButton value="Zaktualizuj" update="data-table:productTable data-table:growl"  action="#{productListBB.editQuantity()}" rendered="#{remoteClient.isInRole('admin')}" oncomplete="PF('productDialog').hide()"></p:commandButton>
 									<h:outputText value="Dodaj do zamówienia:" rendered="#{remoteClient.isInRole('user')}"/>
 									<p:inputNumber value="#{orderBB.itemQuantity}" modifyValueOnWheel="false" minValue="1" decimalPlaces="0" rendered="#{remoteClient.isInRole('user')}"/>
