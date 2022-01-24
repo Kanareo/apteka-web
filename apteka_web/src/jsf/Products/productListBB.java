@@ -145,10 +145,16 @@ public class productListBB implements Serializable {
 	}
 	
 	public String editQuantity() {
-		if(selectedProduct != null) {
-			productDAO.merge(selectedProduct);
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zmieniono ilość produktu dla produktu o nazwie " + selectedProduct.getProductName(), null));
-		}else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Zmiana ilości nie udała się, spróbuj ponownie", null));
+		try {
+			if(selectedProduct != null) {
+				productDAO.merge(selectedProduct);
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Pomyślnie zmieniono ilość produktu dla produktu o nazwie " + selectedProduct.getProductName(), null));
+			}else ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Zmiana ilości nie udała się, spróbuj ponownie", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wystąpił błąd podczas zapisu", null));
+			return PAGE_STAY_AT_THE_SAME;
+		}
 		return PAGE_STAY_AT_THE_SAME;
 	}
 	
